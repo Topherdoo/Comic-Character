@@ -1,0 +1,10 @@
+"bad" ending: Hero uses the hammer to beat the werewolf, the werewolf says something along the lines of "You don't understand what's happening"
+              When the werewolf dies, the screen instantly blacks out and the hero wakes back up at the beginning of the game.
+              
+Bad ending 2nd time: Same events as the first time, but when the player wakes up, a thought bubble appears over his head with the line
+                        "I can save them..."
+
+true ending: The hero knows what needs to happen in order to break the loop, drops his weapon and raises his hands. Werewolf says
+              something (dialogue will be written later) Camera switches to a first-person view from the werewolf, who stabs the player in the chest.
+              Camera switches back to third-person and shows the werewolf has changed into a human, who is the same as the hero. 
+              The player-version of the hero collapses, the werewolf-hero fades away, and the screen blacks out.
