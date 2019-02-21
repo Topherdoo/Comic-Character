@@ -12,6 +12,10 @@
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	
+	//for testing items
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	
 	
 	public class ItemBar extends MovieClip 
 	{
@@ -23,7 +27,7 @@
 		//space between item slots
 		private var itemSlot:MovieClip;	
 		//Y position of the item bar
-		private var itemBarY:Number = 500;
+		private var itemBarY:Number = 1140;
 		//how far the bar can move to the left before stopping
 		private var itemBarEnd:Number = -413.25;
 		//how far the icons move when pressing an arrow (basically the width of one item slot)
@@ -38,6 +42,9 @@
 		private var fl_DragBounds:Rectangle = new Rectangle(itemBarEnd, itemBarY, -itemBarEnd, 0)
 		//wait time before dragging, to allow for tap
 		private var dragDelay:Timer = new Timer(60);
+		//arrays for the items
+		private var itemSlots:Array = new Array();
+		private var items:Array = new Array();
 		
 		public function ItemBar() 
 		{	
@@ -47,7 +54,7 @@
 			lButton.y = itemBarY;
 			itemBar.y = itemBarY;
 
-			addChild(background);
+			//addChild(background);
 			addChild(itemBar);
 			addChild(lButton);
 			addChild(rButton);
@@ -63,13 +70,64 @@
 			//event listener looking for a touchon the bar
 			itemBar.addEventListener(TouchEvent.TOUCH_BEGIN, startDragging);
 			
-			//event listeners for the items
-			itemBar.slot1.addEventListener(TouchEvent.TOUCH_TAP, slot1Tap);
-			itemBar.slot2.addEventListener(TouchEvent.TOUCH_TAP, slot2Tap);
-			itemBar.slot3.addEventListener(TouchEvent.TOUCH_TAP, slot3Tap);
-			itemBar.slot4.addEventListener(TouchEvent.TOUCH_TAP, slot4Tap);
-			itemBar.slot5.addEventListener(TouchEvent.TOUCH_TAP, slot5Tap);
-			itemBar.slot6.addEventListener(TouchEvent.TOUCH_TAP, slot6Tap);
+			//array of the item slots
+			itemSlots[0] = itemBar.slot1;
+			itemSlots[1] = itemBar.slot2;
+			itemSlots[2] = itemBar.slot3;
+			itemSlots[3] = itemBar.slot4;
+			itemSlots[4] = itemBar.slot5;
+			itemSlots[5] = itemBar.slot6;
+			
+			//event listeners for item testing buttons
+			b1.addEventListener(TouchEvent.TOUCH_TAP, b1t);
+			b2.addEventListener(TouchEvent.TOUCH_TAP, b2t);
+			b3.addEventListener(TouchEvent.TOUCH_TAP, b3t);
+		}
+		
+		//use this function's code when you want the item to be added to the player's inventory
+		private function b1t(event:TouchEvent):void
+		{
+			//make the item icon
+			var beer = new BeerItem();
+			//add it to the bar
+			itemBar.addChild(beer);
+			//set the item's position to the first available slot
+			beer.x = itemSlots[items.length].x;
+			//add an event listener for the item
+			beer.addEventListener(TouchEvent.TOUCH_TAP, useBeer);
+
+			//add the item to the items array
+			items.push(beer);
+		}	
+		
+		private function b2t(event:TouchEvent):void
+		{
+			//make the item icon
+			var hookshot = new HookshotItem();
+			//add it to the bar
+			itemBar.addChild(hookshot);
+			//set the item's position to the first available slot
+			hookshot.x = itemSlots[items.length].x;
+			//add an event listener for the item
+			hookshot.addEventListener(TouchEvent.TOUCH_TAP, useHookshot);
+			
+			//add the item to the items array
+			items.push(hookshot);
+		}
+		
+		private function b3t(event:TouchEvent):void
+		{
+			//make the item icon
+			var hammer = new HammerItem();
+			//add it to the bar
+			itemBar.addChild(hammer);
+			//set the item's position to the first available slot
+			hammer.x = itemSlots[items.length].x;
+			//add an event listener for the item
+			hammer.addEventListener(TouchEvent.TOUCH_TAP, useHammer);
+			
+			//add the item to the items array
+			items.push(hammer);
 		}
 		
 		private function LeftButtonTap(event:TouchEvent):void
@@ -149,12 +207,10 @@
 			trace("start drag");
 			
 			//disable the items while dragging
-			itemBar.slot1.mouseEnabled = false;
-			itemBar.slot2.mouseEnabled = false;
-			itemBar.slot3.mouseEnabled = false;
-			itemBar.slot4.mouseEnabled = false;
-			itemBar.slot5.mouseEnabled = false;
-			itemBar.slot6.mouseEnabled = false;
+			for each(var item in items)
+			{
+				item.mouseEnabled = false;
+			}
 		}
 		
 		private function bar_TouchMove(event:TouchEvent):void
@@ -186,12 +242,10 @@
 				addEventListener(Event.ENTER_FRAME, doVelocity)
 				
 				//re-enable items
-				itemBar.slot1.mouseEnabled = true;
-				itemBar.slot2.mouseEnabled = true;
-				itemBar.slot3.mouseEnabled = true;
-				itemBar.slot4.mouseEnabled = true;
-				itemBar.slot5.mouseEnabled = true;
-				itemBar.slot6.mouseEnabled = true;
+				for each(var item in items)
+				{
+					item.mouseEnabled = true;
+				}
 			}
 			
 			else
@@ -247,40 +301,44 @@
 		}
 		
 		//item touch events
-		private function slot1Tap(event:TouchEvent):void
+		private function useBeer(event:TouchEvent):void
 		{
-			background.visible = false;
-			trace("Slot 1 Tapped");
+			//code goes here
+			trace("used Beer");
+			
+			removeItem(event.target);
 		}
 		
-		private function slot2Tap(event:TouchEvent):void
+		private function useHookshot(event:TouchEvent):void
 		{
-			background.visible = true;
-			trace("Slot 2 Tapped");
+			trace("used Hookshot");
+			
+			removeItem(event.target);
 		}	
 		
-		private function slot3Tap(event:TouchEvent):void
+		private function useHammer(event:TouchEvent):void
 		{
-			background.visible = false;
-			trace("Slot 3 Tapped");
+			trace("used Hammer");
+			
+			removeItem(event.target);
 		}	
 		
-		private function slot4Tap(event:TouchEvent):void
+		private function removeItem(itemRemoved):void
 		{
-			background.visible = true;
-			trace("Slot 4 Tapped");
-		}	
-		
-		private function slot5Tap(event:TouchEvent):void
-		{
-			background.visible = false;
-			trace("Slot 5 Tapped");
-		}	
-		
-		private function slot6Tap(event:TouchEvent):void
-		{
-			background.visible = true;
-			trace("Slot 6 Tapped");
+			for(var i:int = 0; i < items.length; i++)
+			{
+				if(items[i] == itemRemoved)
+				{
+					itemBar.removeChild(items[i]);
+					items.splice(i, 1);
+					i = items.length;
+				}
+			}
+			
+			for(var j:int = 0; j < items.length; j++)
+			{
+				items[j].x = itemSlots[j].x;
+			}
 		}
 	}
 }
