@@ -9,6 +9,8 @@
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	import flash.events.Event;
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
 	
 	
 	public class ItemBar extends MovieClip 
@@ -21,11 +23,10 @@
 		//space between item slots
 		private var itemSlot:MovieClip;	
 		//Y position of the item bar
-		private var itemBarY:Number = 1140;
+		private var itemBarY:Number = 500;
 		//how far the bar can move to the left before stopping
 		private var itemBarEnd:Number = -413.25;
 		//how far the icons move when pressing an arrow (basically the width of one item slot)
-
 		private var movement:Number = 137.75;
 		//Friction for swiping
 		private var friction:Number = 0.4;
@@ -33,7 +34,10 @@
 		private var vel:Number = 0;
 		//for finding velocity
 		private var oldFrame:Number = 0;
-		//private var newFrame:Number = 0;
+		//area the bar can be dragged
+		private var fl_DragBounds:Rectangle = new Rectangle(itemBarEnd, itemBarY, -itemBarEnd, 0)
+		//wait time before dragging, to allow for tap
+		private var dragDelay:Timer = new Timer(60);
 		
 		public function ItemBar() 
 		{	
@@ -55,8 +59,9 @@
 			lButton.addEventListener(TouchEvent.TOUCH_TAP, LeftButtonTap);
 			rButton.addEventListener(TouchEvent.TOUCH_TAP, RightButtonTap);
 
-			//event listener for item bar drag
-			itemBar.addEventListener(TouchEvent.TOUCH_MOVE, bar_TouchBeginHandler);
+			
+			//event listener looking for a touchon the bar
+			itemBar.addEventListener(TouchEvent.TOUCH_BEGIN, startDragging);
 			
 			//event listeners for the items
 			itemBar.slot1.addEventListener(TouchEvent.TOUCH_TAP, slot1Tap);
@@ -116,21 +121,34 @@
 			}
 		}
 		
-		private function bar_TouchBeginHandler(event:TouchEvent):void
+		private function startDragging(event:TouchEvent):void
 		{
-			trace("start drag");
+			//when touch begins, start the delay timer
+			dragDelay.addEventListener(TimerEvent.TIMER, Delay);
+			dragDelay.start();
 			
-			//start dragging the item bar, ccan only be dragged on the x axis, starting at itemBarEnd and ending at -itemBarEnd (between -413.25 and 0)
-			var fl_DragBounds:Rectangle = new Rectangle(itemBarEnd, itemBarY, -itemBarEnd, 0)
-			itemBar.startTouchDrag(event.touchPointID, false, fl_DragBounds);
+			trace("timer started");
+			
+			//add an event listener for ending touch
+			addEventListener(TouchEvent.TOUCH_END, bar_TouchEndHandler);
+		}
+		
+		private function Delay(event:TimerEvent):void
+		{
+			//when delay ends, start the touch move event to drag the bar
+			itemBar.addEventListener(TouchEvent.TOUCH_MOVE, bar_TouchMove);
 			
 			//add an event listener to look at where the bar's current X is
 			addEventListener(Event.ENTER_FRAME, Dragging);
 			
-			//add an event listener to end the drag
-			addEventListener(TouchEvent.TOUCH_END, bar_TouchEndHandler);
+			//stop the timer
+			dragDelay.removeEventListener(TimerEvent.TIMER, Delay);
+			dragDelay.stop();
+			dragDelay.reset();
 			
-			//disable the item slots when dragging (not sure if mouseEnabled works on mobile)
+			trace("start drag");
+			
+			//disable the items while dragging
 			itemBar.slot1.mouseEnabled = false;
 			itemBar.slot2.mouseEnabled = false;
 			itemBar.slot3.mouseEnabled = false;
@@ -138,33 +156,53 @@
 			itemBar.slot5.mouseEnabled = false;
 			itemBar.slot6.mouseEnabled = false;
 		}
+		
+		private function bar_TouchMove(event:TouchEvent):void
+		{
+			//start dragging the item bar, ccan only be dragged on the x axis, starting at itemBarEnd and ending at -itemBarEnd (between -413.25 and 0)
+			itemBar.startTouchDrag(event.touchPointID, false, fl_DragBounds);
+		}
 
 		private function bar_TouchEndHandler(event:TouchEvent):void
 		{
-			trace("end drag");
+			//check if dragging has started by checking the timer
+			if (dragDelay.running == false)
+			{
+				trace("end drag");
+				
+				itemBar.removeEventListener(TouchEvent.TOUCH_MOVE, bar_TouchMove);
+				
+				//stop dragging the bar
+				itemBar.stopTouchDrag(event.touchPointID);
+				
+				//stop looking at the bar position
+				removeEventListener(Event.ENTER_FRAME, Dragging);
+				
+				//set the velocity using the previous position and current position
+				vel = itemBar.x - oldFrame;
+				trace(vel);
+				
+				//start updating the velocity
+				addEventListener(Event.ENTER_FRAME, doVelocity)
+				
+				//re-enable items
+				itemBar.slot1.mouseEnabled = true;
+				itemBar.slot2.mouseEnabled = true;
+				itemBar.slot3.mouseEnabled = true;
+				itemBar.slot4.mouseEnabled = true;
+				itemBar.slot5.mouseEnabled = true;
+				itemBar.slot6.mouseEnabled = true;
+			}
 			
-			//stop dragging the bar
-			itemBar.stopTouchDrag(event.touchPointID);
-			
-			//stop looking at the bar position
-			removeEventListener(Event.ENTER_FRAME, Dragging);
-			
-			//set the velocity using the previous position and current position
-			vel = itemBar.x - oldFrame;
-			
-			//start updating the velocity
-			addEventListener(Event.ENTER_FRAME, doVelocity)
-			
+			else
+			{
+				//stop the timer
+				dragDelay.removeEventListener(TimerEvent.TIMER, Delay);
+				dragDelay.stop();
+			}
+
 			//stop looking for drag end
-			removeEventListener(TouchEvent.TOUCH_END, bar_TouchEndHandler);
-			
-			//re-enable the items (if this works)
-			itemBar.slot1.mouseEnabled = true;
-			itemBar.slot2.mouseEnabled = true;
-			itemBar.slot3.mouseEnabled = true;
-			itemBar.slot4.mouseEnabled = true;
-			itemBar.slot5.mouseEnabled = true;
-			itemBar.slot6.mouseEnabled = true;
+			removeEventListener(TouchEvent.TOUCH_END, bar_TouchEndHandler);	
 		}
 		
 		private function Dragging(event:Event):void
@@ -217,31 +255,31 @@
 		
 		private function slot2Tap(event:TouchEvent):void
 		{
-						background.visible = true;
+			background.visible = true;
 			trace("Slot 2 Tapped");
 		}	
 		
 		private function slot3Tap(event:TouchEvent):void
 		{
-						background.visible = false;
+			background.visible = false;
 			trace("Slot 3 Tapped");
 		}	
 		
 		private function slot4Tap(event:TouchEvent):void
 		{
-						background.visible = true;
+			background.visible = true;
 			trace("Slot 4 Tapped");
 		}	
 		
 		private function slot5Tap(event:TouchEvent):void
 		{
-						background.visible = false;
+			background.visible = false;
 			trace("Slot 5 Tapped");
 		}	
 		
 		private function slot6Tap(event:TouchEvent):void
 		{
-						background.visible = true;
+			background.visible = true;
 			trace("Slot 6 Tapped");
 		}
 	}
