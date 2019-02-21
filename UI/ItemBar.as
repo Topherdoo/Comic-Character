@@ -135,7 +135,7 @@
 			//end any velocity
 			vel = 0;
 			
-			//check the bar's position to make sure it is divisible by the movement (137.75)
+			//check the bar's position to make sure it is divisible by 137.75 (where it's centered)
 			var num = itemBar.x % movement;
 			
 			//check if the bar is as far as it can go
@@ -267,7 +267,7 @@
 		
 		private function doVelocity(event:Event):void
 		{
-			//slow down the velocity with friction if under the minimum (1 or -1)
+			//check if velocity is less than 1
 			if(vel < 1 && vel > -1)
 			{
 				removeEventListener(Event.ENTER_FRAME, doVelocity);				
@@ -327,8 +327,10 @@
 		{
 			for(var i:int = 0; i < items.length; i++)
 			{
+				//find the item that needs to be removed
 				if(items[i] == itemRemoved)
 				{
+					//remove it from the item bar and the array
 					itemBar.removeChild(items[i]);
 					items.splice(i, 1);
 					i = items.length;
@@ -337,6 +339,7 @@
 			
 			for(var j:int = 0; j < items.length; j++)
 			{
+				//reposition each of the items
 				items[j].x = itemSlots[j].x;
 			}
 		}
