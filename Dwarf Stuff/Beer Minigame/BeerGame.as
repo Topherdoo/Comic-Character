@@ -12,11 +12,12 @@
 	public class BeerGame extends MovieClip 
 	{
 		
-		//private var beer:MovieClip = new Beer();
-		private var beerLow:Number = 0;
 		private var mug:MovieClip = new Mug();
 		private var accel:Accelerometer = new Accelerometer();
 		private var box:TextField = new TextField;
+		private var beer:MovieClip = new Beer();
+		private var mugX:Point;
+		private var empty:Boolean;
 		
 		public function BeerGame() 
 		{
@@ -27,29 +28,61 @@
 		
 		private function addGame(event:Event):void
 		{
-			mug.x = stage.stageWidth/2;
-			mug.y = stage.stageHeight/2;
+			addMug();
+			
+			box.textColor = 0xFFFFFF;
+			
+			addChild(beer);
 			
 			addChild(mug);
 			
 			addChild(box);
 			
-			box.textColor = 0xFFFFFF;
+			mug.x = stage.stageWidth/2;
+			mug.y = stage.stageHeight/2;
+			
+			beer.x = mug.width/2;
 			
 			accel.addEventListener(AccelerometerEvent.UPDATE, rotateMug);
 			removeEventListener(Event.ADDED, addGame);
 		}
 		
+		private function addMug():void
+		{
+			mug.rotation = 0;
+			
+			beer.y = mug.y + mug.height/2;
+			
+			mugX = new Point(0, 0);
+		}
+		
 		private function rotateMug(event:AccelerometerEvent):void
 		{
-			var angle:Number = Math.atan2(event.accelerationX, event.accelerationY) * 180/Math.PI;
+			var angle:Number = Math.round(Math.atan2(event.accelerationX, event.accelerationY) * 180/Math.PI);
 			
 			box.text = angle.toString();
 			
 			if (angle > -20 && angle < 179)
 			{	
-					mug.beer.rotation = angle;
-					trace(mug.beer.y);
+				mug.rotation = -angle;
+				
+				if (mug.beerMug.localToGlobal(mugX).y > beer.y - beer.height)
+				{
+					beer.y = mug.beerMug.localToGlobal(mugX).y + beer.height;
+					
+					if (beer.y > 2000)
+					{
+						empty = true;
+					}
+				}
+				
+				if (angle < 10 && angle > -10 && empty)
+				{
+					empty = false;
+					
+					addMug();
+				}					
+
 			}
 
 		}
