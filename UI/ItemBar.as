@@ -78,7 +78,7 @@
 			itemSlots[4] = itemBar.slot5;
 			itemSlots[5] = itemBar.slot6;
 			
-			//event listeners for item testing buttons
+			//event listeners for item testing buttons ---------------Remove these for the game--------------------
 			b1.addEventListener(TouchEvent.TOUCH_TAP, b1t);
 			b2.addEventListener(TouchEvent.TOUCH_TAP, b2t);
 			b3.addEventListener(TouchEvent.TOUCH_TAP, b3t);
@@ -87,7 +87,7 @@
 			b6.addEventListener(TouchEvent.TOUCH_TAP, b6t);
 		}
 		
-		//use this function's code when you want the item to be added to the player's inventory
+		//Test buttons -----------------------------Remove these for the game-----------------------------------
 		private function b1t(event:TouchEvent):void
 		{
 			addBeer();
@@ -125,6 +125,7 @@
 		{
 			var exists = false;
 			
+			//check the items to see if the needed item already exists, to prevent getting multiple
 			for each (var item in items)
 			{
 				if (item.name == "beer")
@@ -139,7 +140,7 @@
 			{
 				//make the item icon
 				var beer = new BeerItem();
-				//name it
+				//name the item so that we can check if it is in the items
 				beer.name = "beer";
 				//add it to the bar
 				itemBar.addChild(beer);
@@ -395,7 +396,7 @@
 		
 		private function bar_TouchMove(event:TouchEvent):void
 		{
-			//start dragging the item bar, ccan only be dragged on the x axis, starting at itemBarEnd and ending at -itemBarEnd (between -413.25 and 0)
+			//start dragging the item bar, ccan only be dragged on the x axis, between -413.25 and 0)
 			itemBar.startTouchDrag(event.touchPointID, false, fl_DragBounds);
 		}
 
@@ -480,7 +481,7 @@
 			}
 		}
 		
-		//------------ Touch events for an item, add what you want them to do here. Use removeItem(event.target) when you want to remove the item from the bar --------------------
+		//------------ Functions for when you touch an item on the bar, add your code here. Use removeItem(event.target) when you want to remove the item from the bar --------------------
 		//_________________________________________________________________________________________________________________________________________________________________________
 		
 		private function useBeer(event:TouchEvent):void
@@ -493,6 +494,7 @@
 		
 		private function useHookshot(event:TouchEvent):void
 		{
+			//code goes here
 			trace("used Hookshot");
 			
 			removeItem(event.target);
@@ -500,12 +502,12 @@
 		
 		private function useHammer(event:TouchEvent):void
 		{
+			//code goes here
 			trace("used Hammer");
 			
 			removeItem(event.target);
 		}	
 		
-		//item touch events
 		private function useLightning(event:TouchEvent):void
 		{
 			//code goes here
@@ -516,6 +518,7 @@
 		
 		private function useFire(event:TouchEvent):void
 		{
+			//code goes here
 			trace("used Fire Staff");
 			
 			removeItem(event.target);
@@ -523,6 +526,7 @@
 		
 		private function useDagger(event:TouchEvent):void
 		{
+			//code goes here
 			trace("used Dagger");
 			
 			removeItem(event.target);
