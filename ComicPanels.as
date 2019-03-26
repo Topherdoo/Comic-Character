@@ -23,7 +23,7 @@
 		public var transImage: MovieClip = CurrentPanel;
 		public var NextPanel: MovieClip = panel11;
 		public var movieClipHolder: Array;
-		private var CurrentMC: MovieClip; //
+		private var CurrentMC: MovieClip = new VPanel1(); //
 		//
 		// for transitions
 		public var previousPosX: Number = 0;
@@ -95,7 +95,7 @@
 		public function BirthMC(): void {
 			
 			//KillPanel();
-			
+			trace(CurrentMC);
 			movieClipHolder.push(CurrentMC);
 			addChild(CurrentMC);
 			CurrentMC.gotoAndPlay(playFrame);
@@ -159,6 +159,7 @@
 
 					case 11:
 						// first panel code
+						CurrentMC = new VPanel1();
 						CurrentPanel = panel11;
 						NextPanel = panel12;
 						BirthTrans();
@@ -170,7 +171,7 @@
 						newPanel = true;
 
 
-						CurrentMC = new TestPanel();
+		
 						//newPanel = true;
 						CurrentMC.height *= 0.45;
 						CurrentMC.width *= 0.6;
@@ -626,6 +627,7 @@
 
 					case 11:
 						// first panel code
+						CurrentMC = new VPanel1();
 						CurrentPanel = panel11;
 						NextPanel = panel12;
 						BirthTrans();
@@ -638,7 +640,7 @@
 						BtnDiscounter(0, false);
 
 
-						CurrentMC = new TestPanel();
+						
 						newPanel = true;
 						CurrentMC.height *= 0.45;
 						CurrentMC.width *= 0.6;

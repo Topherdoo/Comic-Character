@@ -26,8 +26,10 @@
 		private var itemBar:MovieClip = new ItemBarMC();
 		//space between item slots
 		private var itemSlot:MovieClip;	
-		//Y position of the item bar
-		private var itemBarY:Number = 1140;
+		
+		//----------------------------- Y position of the item bar ----------------------------
+		private var itemBarY:Number = 500;
+		
 		//how far the bar can move to the left before stopping
 		private var itemBarEnd:Number = -413.25;
 		//how far the icons move when pressing an arrow (basically the width of one item slot)
@@ -78,32 +80,102 @@
 			itemSlots[4] = itemBar.slot5;
 			itemSlots[5] = itemBar.slot6;
 			
-			//event listeners for item testing buttons
+			//event listeners for item testing buttons ---------------Remove these for the game--------------------
 			b1.addEventListener(TouchEvent.TOUCH_TAP, b1t);
 			b2.addEventListener(TouchEvent.TOUCH_TAP, b2t);
 			b3.addEventListener(TouchEvent.TOUCH_TAP, b3t);
+			b4.addEventListener(TouchEvent.TOUCH_TAP, b4t);
+			b5.addEventListener(TouchEvent.TOUCH_TAP, b5t);
+			b6.addEventListener(TouchEvent.TOUCH_TAP, b6t);
 		}
 		
-		//use this function's code when you want the item to be added to the player's inventory
+		//Test buttons -----------------------------Remove these for the game-----------------------------------
 		private function b1t(event:TouchEvent):void
 		{
-			//make the item icon
-			var beer = new BeerItem();
-			//add it to the bar
-			itemBar.addChild(beer);
-			//set the item's position to the first available slot
-			beer.x = itemSlots[items.length].x;
-			//add an event listener for the item
-			beer.addEventListener(TouchEvent.TOUCH_TAP, useBeer);
-
-			//add the item to the items array
-			items.push(beer);
+			addBeer();
 		}	
 		
 		private function b2t(event:TouchEvent):void
 		{
+			addHookshot();
+		}
+		
+		private function b3t(event:TouchEvent):void
+		{
+			addHammer();
+		}
+		
+		private function b4t(event:TouchEvent):void
+		{
+			addLightning();
+		}	
+		
+		private function b5t(event:TouchEvent):void
+		{
+			addFire();
+		}
+		
+		private function b6t(event:TouchEvent):void
+		{
+			addDagger();
+		}
+		
+		//------------------------ Call these functions when you want to add an item ----------------------------
+		//_______________________________________________________________________________________________________
+		
+		private function addBeer():void
+		{
+			var exists = false;
+			
+			//check the items to see if the needed item already exists, to prevent getting multiple
+			for each (var item in items)
+			{
+				if (item.name == "beer")
+				{
+					exists = true;
+					
+					break;
+				}
+			}
+			
+			if (exists == false)
+			{
+				//make the item icon
+				var beer = new BeerItem();
+				//name the item so that we can check if it is in the items
+				beer.name = "beer";
+				//add it to the bar
+				itemBar.addChild(beer);
+				//set the item's position to the first available slot
+				beer.x = itemSlots[items.length].x;
+				//add an event listener for the item
+				beer.addEventListener(TouchEvent.TOUCH_TAP, useBeer);
+
+				//add the item to the items array
+				items.push(beer);					
+			}
+
+		}
+				
+		private function addHookshot():void
+		{
+			var exists = false;
+			
+			for each (var item in items)
+			{
+				if (item.name == "hookshot")
+				{
+					exists = true;
+					
+					break;
+				}
+			}
+			
+			if (exists == false)
+			{
 			//make the item icon
 			var hookshot = new HookshotItem();
+			hookshot.name = "hookshot";
 			//add it to the bar
 			itemBar.addChild(hookshot);
 			//set the item's position to the first available slot
@@ -113,12 +185,28 @@
 			
 			//add the item to the items array
 			items.push(hookshot);
-		}
+			}
+		}	
 		
-		private function b3t(event:TouchEvent):void
+		private function addHammer():void
 		{
+			var exists = false;
+			
+			for each (var item in items)
+			{
+				if (item.name == "hammer")
+				{
+					exists = true;
+					
+					break;
+				}
+			}
+			
+			if (exists == false)
+			{
 			//make the item icon
 			var hammer = new HammerItem();
+			hammer.name = "hammer";
 			//add it to the bar
 			itemBar.addChild(hammer);
 			//set the item's position to the first available slot
@@ -128,6 +216,101 @@
 			
 			//add the item to the items array
 			items.push(hammer);
+			}
+		}
+		
+		private function addLightning():void
+		{
+			var exists = false;
+			
+			for each (var item in items)
+			{
+				if (item.name == "lightning" || item.name == "fire")
+				{
+					exists = true;
+					
+					break;
+				}
+			}
+			
+			if (exists == false)
+			{
+			//make the item icon
+			var lightning = new LightningItem();
+			lightning.name = "lightning";
+			//add it to the bar
+			itemBar.addChild(lightning);
+			//set the item's position to the first available slot
+			lightning.x = itemSlots[items.length].x;
+			//add an event listener for the item
+			lightning.addEventListener(TouchEvent.TOUCH_TAP, useLightning);
+			
+			//add the item to the items array
+			items.push(lightning);
+			}
+		}
+		
+		private function addFire():void
+		{
+			var exists = false;
+			
+			for each (var item in items)
+			{
+				if (item.name == "lightning" || item.name == "fire")
+				{
+					exists = true;
+					
+					break;
+				}
+			}
+			
+			
+			if (exists == false)
+			{
+			//make the item icon
+			var fire = new FireItem();
+			fire.name = "fire";
+			//add it to the bar
+			itemBar.addChild(fire);
+			//set the item's position to the first available slot
+			fire.x = itemSlots[items.length].x;
+			//add an event listener for the item
+			fire.addEventListener(TouchEvent.TOUCH_TAP, useFire);
+			
+			//add the item to the items array
+			items.push(fire);
+			}
+		}
+		
+		private function addDagger():void
+		{
+			var exists = false;
+			
+			for each (var item in items)
+			{
+				if (item.name == "dagger")
+				{
+					exists = true;
+					
+					break;
+				}
+			}
+
+			if (exists == false)
+			{
+			//make the item icon
+			var dagger = new DaggerItem();
+			dagger.name = "dagger";
+			//add it to the bar
+			itemBar.addChild(dagger);
+			//set the item's position to the first available slot
+			dagger.x = itemSlots[items.length].x;
+			//add an event listener for the item
+			dagger.addEventListener(TouchEvent.TOUCH_TAP, useDagger);
+			
+			//add the item to the items array
+			items.push(dagger);
+			}
 		}
 		
 		private function LeftButtonTap(event:TouchEvent):void
@@ -215,7 +398,7 @@
 		
 		private function bar_TouchMove(event:TouchEvent):void
 		{
-			//start dragging the item bar, ccan only be dragged on the x axis, starting at itemBarEnd and ending at -itemBarEnd (between -413.25 and 0)
+			//start dragging the item bar, ccan only be dragged on the x axis, between -413.25 and 0)
 			itemBar.startTouchDrag(event.touchPointID, false, fl_DragBounds);
 		}
 
@@ -300,7 +483,9 @@
 			}
 		}
 		
-		//item touch events
+		//------------ Functions for when you touch an item on the bar, add your code here. Use removeItem(event.target) when you want to remove the item from the bar --------------------
+		//_________________________________________________________________________________________________________________________________________________________________________
+		
 		private function useBeer(event:TouchEvent):void
 		{
 			//code goes here
@@ -311,6 +496,7 @@
 		
 		private function useHookshot(event:TouchEvent):void
 		{
+			//code goes here
 			trace("used Hookshot");
 			
 			removeItem(event.target);
@@ -318,7 +504,32 @@
 		
 		private function useHammer(event:TouchEvent):void
 		{
+			//code goes here
 			trace("used Hammer");
+			
+			removeItem(event.target);
+		}	
+		
+		private function useLightning(event:TouchEvent):void
+		{
+			//code goes here
+			trace("used Lightning Staff");
+			
+			removeItem(event.target);
+		}
+		
+		private function useFire(event:TouchEvent):void
+		{
+			//code goes here
+			trace("used Fire Staff");
+			
+			removeItem(event.target);
+		}	
+		
+		private function useDagger(event:TouchEvent):void
+		{
+			//code goes here
+			trace("used Dagger");
 			
 			removeItem(event.target);
 		}	
