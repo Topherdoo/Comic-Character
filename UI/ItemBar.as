@@ -26,8 +26,10 @@
 		private var itemBar:MovieClip = new ItemBarMC();
 		//space between item slots
 		private var itemSlot:MovieClip;	
-		//Y position of the item bar
+		
+		//----------------------------- Y position of the item bar ----------------------------
 		private var itemBarY:Number = 500;
+		
 		//how far the bar can move to the left before stopping
 		private var itemBarEnd:Number = -413.25;
 		//how far the icons move when pressing an arrow (basically the width of one item slot)
