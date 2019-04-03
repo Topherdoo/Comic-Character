@@ -31,10 +31,12 @@
 
 	public class ComicPanels extends MovieClip {
 		//Button Controls
-		private var redButton: ButtonRed = new ButtonRed;
-		private var bluButton: ButtonBlue = new ButtonBlue;
+		private var redButton:MovieClip = new ButtonRed;
+		private var bluButton:MovieClip = new ButtonBlue;
 		private var redActive:Boolean = false;
 		private var blueActive:Boolean = false;
+		private var redClicked:Boolean = false;
+		private var blueClicked:Boolean = false;
 
 		//for story flow
 		private var WizardBool: Boolean = false;
@@ -152,16 +154,18 @@
 			vPanels[0] = new CRVPanel1();
 			vPanels[1] = new CRVPanel2();
 			vPanels[2] = new CRVPanel3();
-			vPanels[3] = new VPanel5a();
-			vPanels[4] = new VPanelF();
+			vPanels[3] = new VPanel4b();
+			vPanels[4] = new VPanel5a();
+			vPanels[5] = new VPanel5b();
+			vPanels[6] = new VPanelF();
 			
-			nPanels[0] = new NinjaP1();
-			nPanels[1] = new NinjaP2();
+			nPanels[0] = new NinjaSceneOne();
+			nPanels[1] = new NinjaSceneTwoAlt();
 			nPanels[2] = new NinjaSceneThree();
-			nPanels[3] = new NinjaP4();
-			nPanels[4] = new NinjaP6();
-			nPanels[5] = new NinjaP7();
-			nPanels[6] = new NinjaP8();
+			nPanels[3] = new NinjaSceneFour();
+			nPanels[4] = new NinjaSceneSix();
+			nPanels[5] = new NinjaSceneSeven();
+			nPanels[6] = new NinjaSceneEight();
 			
 			wPanels[0] = new TreesPath();
 			wPanels[1] = new WholeScene();
@@ -212,12 +216,139 @@
 		{
 			removeChild(currentPanel);				
 			
+			//first tank panel
 			if (currentPanel == openingPanels[0])
 				{
 					currentPanel = vPanels[0];
+					currentPanel.x = 350;
+					currentPanel.y = 600;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
 				}
 			
+			else if (currentPanel == vPanels[0])
+				{
+					currentPanel = vPanels[1];
+					currentPanel.x = 0;
+					currentPanel.y = -200;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
+				}	
+				
+			//go left
+			else if (currentPanel == vPanels[1] && redClicked == true)
+				{
+					currentPanel = vPanels[2];
+					currentPanel.x = 0;
+					currentPanel.y = -200;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
+				}
+				
+			else if (currentPanel == vPanels[2])
+				{
+					currentPanel = vPanels[4];
+					currentPanel.x = 0;
+					currentPanel.y = -400;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
+				}	
+				
+			//go right
+			else if (currentPanel == vPanels[1] && blueClicked == true)
+				{
+					currentPanel = vPanels[3];
+					currentPanel.x = 0;
+					currentPanel.y = -200;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
+				}
+				
+	
+			else if (currentPanel == vPanels[3])
+				{
+					currentPanel = vPanels[5];
+					currentPanel.x = 0;
+					currentPanel.y = -200;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
+				}	
+				
+			//tank item is used
+			else if (0 == 1)
+				{
+					currentPanel = vPanels[6];
+					currentPanel.x = 0;
+					currentPanel.y = 0;
+					currentPanel.scaleX = 0.8;
+					currentPanel.scaleY = 0.8;
+				}
+				
+			//first ninja panel
+			else if (currentPanel == vPanels[4] || currentPanel == vPanels[5])
+				{
+					addHammer();
+					
+					currentPanel = nPanels[0];
+					currentPanel.x = 0;
+					currentPanel.y = -550;
+					currentPanel.scaleX = 1;
+					currentPanel.scaleY = 1;
+				}	
+				
+			else if (currentPanel == nPanels[0])
+				{
+					currentPanel = nPanels[1];
+					currentPanel.x = -50;
+					currentPanel.y = -550;
+				}		
+				
+			else if (currentPanel == nPanels[1])
+				{
+					currentPanel = nPanels[2];
+					currentPanel.x = -50;
+					currentPanel.y = -550;
+				}
+
+			//red choice
+			else if (currentPanel == nPanels[2] && redClicked == true)
+				{
+					currentPanel = nPanels[3];
+				}		
+				
+			else if (currentPanel == nPanels[3])
+				{
+					currentPanel = nPanels[4];
+					currentPanel.x = 0;
+					currentPanel.y = -550;
+				}
+				
+			//blue choice
+			else if (currentPanel == nPanels[2] && blueClicked == true)
+				{
+					currentPanel = nPanels[5];
+					currentPanel.x = 0;
+					currentPanel.y = -550;
+				}
+				
+			//ninja item
+			else if (0 == 1)
+				{
+					currentPanel = nPanels[6];
+				}
+				
+			
+			currentPanel.gotoAndPlay(1);
+				
 			addChild(currentPanel);
+				
+			setChildIndex(uibackground, numChildren - 1);
+			setChildIndex(redButton, numChildren - 1);
+			setChildIndex(bluButton, numChildren - 1);
+			setChildIndex(itemBar, numChildren - 1);
+				
+			redClicked = false;
+			blueClicked = false;
 		}
 
 		//Cases for red button, then blue button
@@ -226,6 +357,7 @@
 		{
 			if (redActive == true)
 			{
+				redClicked = true;
 				changePanel();
 			}
 		}
@@ -234,13 +366,14 @@
 		{
 			if (blueActive == true)
 			{
+				blueClicked = true;
 				changePanel();
 			}
 		}
 
 
 		private function update(e: Event): void {
-			if (currentPanel.currentFrame == currentPanel.totalFrames - 1)
+			if (currentPanel.currentFrame == currentPanel.totalFrames)
 			{
 				redActive = true;
 				blueActive = true;
@@ -250,8 +383,9 @@
 			}
 			
 			else {
-				redActive = false;
-				blueActive = false;
+				//change before end
+				redActive = true;
+				blueActive = true;
 				
 				redButton.gotoAndStop(2);
 				bluButton.gotoAndStop(2);
