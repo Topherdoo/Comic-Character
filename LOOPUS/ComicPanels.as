@@ -2,9 +2,10 @@
 
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-	import flash.display.Sprite;
+	import flash.display.Sprite; 
 	import flash.display.SimpleButton;
 	import flash.events.MouseEvent;
+	
 	import flash.events.Event;
 	
 	
