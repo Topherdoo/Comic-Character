@@ -856,7 +856,7 @@
 						
 						case 13:						
 						
-						if(NinjaBool == true){
+						if(NinjaBool == true || WizardBool == true){
 							NextPanel = panel14;
 							transitioningDown = true;
 							nextCase = 13.1;
@@ -894,25 +894,37 @@
 						}
 						break;
 						case 13.1:
-							NextPanel = panel31;
+							
+							
 							transitioningDown = true;
-							nextCase = 31;
+							
 							newPanel = true;
 							KillPanel();
-							CurrentMC = new WholeScene1();
+							if (NinjaBool == true){
+								NextPanel = panel31;
+								nextCase = 31;
+								CurrentMC = new WholeScene1();
+								WizardBool = true;
+								boolPage2= false;
+							}else{
+								NextPanel = panel21;
+								nextCase = 21;
+								CurrentMC = new NinjaP1();
+								NinjaBool = true;
+							}
+							
 							BtnDiscounter(24, false);
 							playFrame = 1;
 							DefaultPanels();
-							
-							CurrentMC.x = 95;
-							CurrentMC.y = 45;
-							CurrentMC.width *= .8;
-							CurrentMC.height *= .8;
+							CurrentMC.x = 122;
+							CurrentMC.y = 16;
+							CurrentMC.width *= 0.65;
+							CurrentMC.height *= 0.65;
+							addHammer();
 							
 							boolPage1= false;
-							boolPage1= false;
-						
-							WizardBool = true;
+
+							
 							break;
 						
 						case 15:
@@ -2073,7 +2085,7 @@
 						
 						case 13:						
 						
-						if(WizardBool == true){
+						if(WizardBool == true || NinjaBool == true){
 							NextPanel = panel14;
 							transitioningDown = true;
 							nextCase = 13.1;
@@ -2114,12 +2126,25 @@
 						}
 						break;
 						case 13.1:
-							NextPanel = panel31;
+							
+							
 							transitioningDown = true;
-							nextCase = 31;
+							
 							newPanel = true;
 							KillPanel();
-							CurrentMC = new WholeScene1();
+							if (NinjaBool == true){
+								NextPanel = panel31;
+								nextCase = 31;
+								CurrentMC = new WholeScene1();
+								WizardBool = true;
+								boolPage2= false;
+							}else{
+								NextPanel = panel21;
+								nextCase = 21;
+								CurrentMC = new NinjaP1();
+								NinjaBool = true;
+							}
+							
 							BtnDiscounter(24, false);
 							playFrame = 1;
 							DefaultPanels();
@@ -2127,11 +2152,11 @@
 							CurrentMC.y = 16;
 							CurrentMC.width *= 0.65;
 							CurrentMC.height *= 0.65;
+							addHammer();
 							
 							boolPage1= false;
 
 							
-							NinjaBool = true;
 							break;
 						
 						case 15:
@@ -2309,6 +2334,7 @@
 							PanY = 103;
 							PanH = 720;
 							PanW = 790;
+							boolPage2= false;
 							
 							
 							break;
@@ -2815,7 +2841,7 @@
 					
 					case 41.2:
 						//NextPanel = panel42;
-						transitioningDown = true;
+						//transitioningDown = false;
 						nextCase = 41.2;
 						//caseNumber = nextCase
 
@@ -2906,7 +2932,7 @@
 					case 44.2:
 						//NextPanel = panel44;
 						//transitioningDown = true;
-						nextCase = 44.3;
+						nextCase = 45;
 						caseNumber = nextCase;
 						//newPanel = true;
 						KillPanel();
@@ -2925,7 +2951,7 @@
 					case 44.3:
 						//NextPanel = panel44;
 						//transitioningDown = true;
-						nextCase = 44.4;
+						nextCase = 45;
 						caseNumber = nextCase;
 						//newPanel = true;
 						KillPanel();
@@ -2944,11 +2970,11 @@
 					case 44.4:
 						//NextPanel = panel44;
 						//transitioningDown = true;
-						nextCase = 44.5;
+						nextCase = 45;
 						caseNumber = nextCase;
 						//newPanel = true;
 						KillPanel();
-						CurrentMC = new DwarfP421();
+						CurrentMC = new TDwarfP41();
 						BirthMC();
 						BtnDiscounter(24, false);
 						playFrame = 1;
