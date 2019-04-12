@@ -1943,7 +1943,7 @@
 						KillPanel();
 						CurrentMC = new WolfEChoice();
 						
-						BtnDiscounter(24, false);
+						BtnDiscounter(1500, false);
 						playFrame = 2;
 						//statements;
 						
@@ -3178,7 +3178,7 @@
 						KillPanel();
 						CurrentMC = new WolfDChoice();
 						
-						BtnDiscounter(24, false);
+						BtnDiscounter(1500, false);
 						playFrame = 2;
 						//statements;
 						
